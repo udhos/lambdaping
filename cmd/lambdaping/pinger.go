@@ -66,15 +66,10 @@ func invoke(lambdaArn string, clientLambda *lambda.Client, tracer trace.Tracer, 
 	_, span := tracer.Start(context.TODO(), me)
 	defer span.End()
 
-	functionName, errFuncName := getARNFunctionName(lambdaArn)
-	if errFuncName != nil {
-		return traceError(span, errFuncName)
-	}
-
 	requestBytes := []byte(`{"lambdaping":"hello"}`)
 
 	input := &lambda.InvokeInput{
-		FunctionName: aws.String(functionName),
+		FunctionName: aws.String(lambdaArn),
 		Payload:      requestBytes,
 	}
 
@@ -134,18 +129,6 @@ func getARNRegion(arn string) (string, error) {
 	region := fields[3]
 	log.Printf("%s=[%s]", me, region)
 	return region, nil
-}
-
-// arn:aws:lambda:us-east-1:123456789012:function:forward_to_sqs
-func getARNFunctionName(arn string) (string, error) {
-	const me = "getARNFunctionName"
-	fields := strings.SplitN(arn, ":", 7)
-	if len(fields) < 7 {
-		return "", fmt.Errorf("%s: bad ARN=[%s]", me, arn)
-	}
-	funcName := fields[6]
-	//log.Printf("%s=[%s]", me, funcName)
-	return funcName, nil
 }
 
 func awsConfig(region, roleArn, roleExternalID, roleSessionName string) (aws.Config, string, error) {

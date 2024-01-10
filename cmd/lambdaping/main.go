@@ -16,7 +16,7 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "0.1.0"
+const version = "0.1.1"
 
 type application struct {
 	me           string
