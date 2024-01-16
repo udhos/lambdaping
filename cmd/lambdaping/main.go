@@ -10,20 +10,18 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/udhos/otelconfig/oteltrace"
 	"go.opentelemetry.io/otel/trace"
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "0.1.1"
+const version = "0.1.2"
 
 type application struct {
 	me           string
 	conf         config
 	serverHealth *http.Server
 	tracer       trace.Tracer
-	lambdaClient *lambda.Client
 }
 
 func longVersion(me string) string {
@@ -63,14 +61,6 @@ func main() {
 	app := &application{
 		me:   me,
 		conf: getConfig(me),
-	}
-
-	{
-		clientLambda, errClientLambda := newLambdaClient(app.conf.lambdaArn, app.conf.lambdaRoleArn, app.me, "")
-		if errClientLambda != nil {
-			log.Fatalf("lambda client: %v", errClientLambda)
-		}
-		app.lambdaClient = clientLambda
 	}
 
 	//

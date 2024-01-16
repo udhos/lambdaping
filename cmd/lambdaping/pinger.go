@@ -34,9 +34,24 @@ func pinger(app *application) {
 	countOk := make([]int, size)
 	countErrors := make([]int, size)
 
+	clientPerRegion := map[string]*lambda.Client{}
+
 	for {
 		for i, arn := range lambdaARNsList {
-			if errInvoke := invoke(arn, app.lambdaClient, app.tracer, app.conf.debug); errInvoke == nil {
+			region, errRegion := getARNRegion(arn)
+			if errRegion != nil {
+				log.Fatalf("%s: ARN region error: %v", me, errRegion)
+			}
+			client := clientPerRegion[region]
+			if client == nil {
+				var errClient error
+				client, errClient = newLambdaClient(arn, app.conf.lambdaRoleArn, app.me, "")
+				if errClient != nil {
+					log.Fatalf("%s: lambda client error: %v", me, errClient)
+				}
+				clientPerRegion[region] = client
+			}
+			if errInvoke := invoke(arn, client, app.tracer, app.conf.debug); errInvoke == nil {
 				countOk[i]++
 			} else {
 				log.Printf("%s: invoke error: %v", me, errInvoke)
@@ -127,7 +142,7 @@ func getARNRegion(arn string) (string, error) {
 		return "", fmt.Errorf("%s: bad ARN=[%s]", me, arn)
 	}
 	region := fields[3]
-	log.Printf("%s=[%s]", me, region)
+	//log.Printf("%s=[%s]", me, region)
 	return region, nil
 }
 
