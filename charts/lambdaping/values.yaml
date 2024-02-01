@@ -37,6 +37,9 @@ redeploy: always
 
 podAnnotations:
   "sidecar.istio.io/inject": "true"
+  "prometheus.io/scrape": "true"
+  "prometheus.io/path": /metrics
+  "prometheus.io/port": "3000"
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -88,6 +91,10 @@ configMapProperties:
   #HEALTH_ADDR: :8888
   #HEALTH_PATH: /health
   #LAMBDA_ROLE_ARN: arn:aws:iam::100010001000:role/invoker
+  #METRICS_ADDR: :3000
+  #METRICS_PATH: /metrics
+  #METRICS_NAMESPACE: ""
+  #METRICS_BUCKETS_LATENCY_CLIENT: "0.005, 0.01, 0.025, 0.05, 0.1, 0.25, .5, 1, 2.5, 5, 10, 25, 50"
   #
   # General configuration: https://opentelemetry.io/docs/concepts/sdk-configuration/general-sdk-configuration/
   # Exporter configuration: https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/

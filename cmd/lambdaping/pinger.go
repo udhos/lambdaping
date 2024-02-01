@@ -51,12 +51,20 @@ func pinger(app *application) {
 				}
 				clientPerRegion[region] = client
 			}
+
+			begin := time.Now()
+			var status string
 			if errInvoke := invoke(arn, client, app.tracer, app.conf.body, app.conf.debug); errInvoke == nil {
 				countOk[i]++
+				status = "SUCCESS"
 			} else {
 				log.Printf("%s: invoke error: %v", me, errInvoke)
 				countErrors[i]++
+				status = "ERROR"
 			}
+
+			elap := time.Since(begin)
+			app.met.recordLatencyClient("invoke", status, arn, elap)
 			if app.conf.debug {
 				log.Printf("%s: %s: success=%d error=%d",
 					me, arn, countOk[i], countErrors[i])

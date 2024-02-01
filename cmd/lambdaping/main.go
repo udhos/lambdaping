@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/udhos/otelconfig/oteltrace"
 	"go.opentelemetry.io/otel/trace"
 	_ "go.uber.org/automaxprocs"
@@ -18,10 +19,12 @@ import (
 const version = "0.2.0"
 
 type application struct {
-	me           string
-	conf         config
-	serverHealth *http.Server
-	tracer       trace.Tracer
+	me            string
+	conf          config
+	serverHealth  *http.Server
+	serverMetrics *http.Server
+	tracer        trace.Tracer
+	met           *metrics
 }
 
 func longVersion(me string) string {
@@ -104,6 +107,28 @@ func main() {
 			log.Printf("health server: listening on %s %s", app.conf.healthAddr, app.conf.healthPath)
 			err := app.serverHealth.ListenAndServe()
 			log.Fatalf("health server: exited: %v", err)
+		}()
+	}
+
+	//
+	// start metrics server
+	//
+
+	{
+		app.met = newMetrics(app.conf.metricsNamespace, app.conf.metricsLatencyBucketsClient)
+
+		mux := http.NewServeMux()
+		app.serverMetrics = &http.Server{
+			Addr:    app.conf.metricsAddr,
+			Handler: mux,
+		}
+
+		mux.Handle(app.conf.metricsPath, promhttp.Handler())
+
+		go func() {
+			log.Printf("metrics server: listening on %s %s", app.conf.metricsAddr, app.conf.metricsPath)
+			err := app.serverMetrics.ListenAndServe()
+			log.Fatalf("metrics server: exited: %v", err)
 		}()
 	}
 
