@@ -8,6 +8,7 @@ import (
 
 type config struct {
 	interval      time.Duration
+	body          string
 	healthAddr    string
 	healthPath    string
 	lambdaArn     string
@@ -21,6 +22,7 @@ func getConfig(roleSessionName string) config {
 
 	return config{
 		interval:      env.Duration("INTERVAL", 10*time.Second),
+		body:          env.String("BODY", `{"hello":"world"}`),
 		healthAddr:    env.String("HEALTH_ADDR", ":8888"),
 		healthPath:    env.String("HEALTH_PATH", "/health"),
 		lambdaArn:     env.String("LAMBDA_ARN", ""),

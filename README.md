@@ -22,6 +22,7 @@ go install ./...
 # optional
 export DEBUG=true
 export LAMBDA_ROLE_ARN=arn:aws:iam::100010001000:role/invoker
+export BODY='{"hello":"world"}'
 
 # mandatory
 export LAMBDA_ARN=["arn:aws:lambda:us-east-1:100010001000:function:funcname"]

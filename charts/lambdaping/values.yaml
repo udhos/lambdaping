@@ -84,6 +84,7 @@ configMapProperties:
   DEBUG: "true"
   #SECRET_ROLE_ARN: ""
   #INTERVAL: 10s
+  #BODY: '{"hello":"world"}'
   #HEALTH_ADDR: :8888
   #HEALTH_PATH: /health
   #LAMBDA_ROLE_ARN: arn:aws:iam::100010001000:role/invoker

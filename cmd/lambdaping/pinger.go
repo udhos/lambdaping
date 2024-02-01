@@ -51,7 +51,7 @@ func pinger(app *application) {
 				}
 				clientPerRegion[region] = client
 			}
-			if errInvoke := invoke(arn, client, app.tracer, app.conf.debug); errInvoke == nil {
+			if errInvoke := invoke(arn, client, app.tracer, app.conf.body, app.conf.debug); errInvoke == nil {
 				countOk[i]++
 			} else {
 				log.Printf("%s: invoke error: %v", me, errInvoke)
@@ -75,13 +75,13 @@ func traceError(span trace.Span, e error) error {
 	return e
 }
 
-func invoke(lambdaArn string, clientLambda *lambda.Client, tracer trace.Tracer, debug bool) error {
+func invoke(lambdaArn string, clientLambda *lambda.Client, tracer trace.Tracer, body string, debug bool) error {
 	const me = "invoke"
 
 	_, span := tracer.Start(context.TODO(), me)
 	defer span.End()
 
-	requestBytes := []byte(`{"lambdaping":"hello"}`)
+	requestBytes := []byte(body)
 
 	input := &lambda.InvokeInput{
 		FunctionName: aws.String(lambdaArn),
