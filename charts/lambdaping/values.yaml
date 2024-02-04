@@ -93,7 +93,11 @@ configMapProperties:
   #LAMBDA_ROLE_ARN: arn:aws:iam::100010001000:role/invoker
   #METRICS_ADDR: :3000
   #METRICS_PATH: /metrics
-  #METRICS_NAMESPACE: ""
+  #METRICS_NAMESPACE: lambda
+  #METRICS_LATENCY_SPRING_NAME_CLIENT: client_requests_seconds
+  #METRICS_LABEL_METHOD: method
+  #METRICS_LABEL_STATUS: status
+  #ETRICS_LABEL_URI: uri
   #METRICS_BUCKETS_LATENCY_CLIENT: "0.005, 0.01, 0.025, 0.05, 0.1, 0.25, .5, 1, 2.5, 5, 10, 25, 50"
   #
   # General configuration: https://opentelemetry.io/docs/concepts/sdk-configuration/general-sdk-configuration/

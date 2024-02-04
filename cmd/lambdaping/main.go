@@ -16,7 +16,7 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "0.2.0"
+const version = "0.3.0"
 
 type application struct {
 	me            string
@@ -115,7 +115,12 @@ func main() {
 	//
 
 	{
-		app.met = newMetrics(app.conf.metricsNamespace, app.conf.metricsLatencyBucketsClient)
+		app.met = newMetrics(app.conf.metricsNamespace,
+			app.conf.metricsNameLatencySpringNameClient,
+			app.conf.metricsLabelMethod,
+			app.conf.metricsLabelStatus,
+			app.conf.metricsLabelURI,
+			app.conf.metricsLatencyBucketsClient)
 
 		mux := http.NewServeMux()
 		app.serverMetrics = &http.Server{

@@ -11,15 +11,7 @@ type metrics struct {
 	latencySpringClient *prometheus.HistogramVec
 }
 
-var (
-	dimensionsSpring = []string{"method", "status", "uri"}
-)
-
-const (
-	latencySpringNameClient = "lambda_client_requests_seconds"
-)
-
-func newMetrics(namespace string, latencyBucketsClient []float64) *metrics {
+func newMetrics(namespace, latencySpringNameClient, method, status, uri string, latencyBucketsClient []float64) *metrics {
 	const me = "newMetrics"
 
 	//
@@ -33,7 +25,7 @@ func newMetrics(namespace string, latencyBucketsClient []float64) *metrics {
 			Help:      "Spring-like client request duration in seconds.",
 			Buckets:   latencyBucketsClient,
 		},
-		dimensionsSpring,
+		[]string{method, status, uri},
 	)
 
 	if err := prometheus.Register(latencySpringClient); err != nil {
