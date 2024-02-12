@@ -16,7 +16,7 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "0.3.0"
+const version = "1.0.0"
 
 type application struct {
 	me            string
@@ -99,7 +99,7 @@ func main() {
 			Handler: mux,
 		}
 
-		mux.HandleFunc(app.conf.healthPath, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc(app.conf.healthPath, func(w http.ResponseWriter, _ /*r*/ *http.Request) {
 			http.Error(w, "health ok", 200)
 		})
 
