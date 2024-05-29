@@ -2,6 +2,18 @@ apiVersion: v1
 entries:
   lambdaping:
   - apiVersion: v2
+    appVersion: 1.0.1
+    created: "2024-05-29T00:33:29.050686525-03:00"
+    description: Install lambdaping helm chart into kubernetes.
+    digest: 1cfba6cf22e5231fe531076f86c32f6db5b0d1a7044c60d28d87d55313d51892
+    name: lambdaping
+    sources:
+    - https://github.com/udhos/lambdaping
+    type: application
+    urls:
+    - https://udhos.github.io/lambdaping/lambdaping-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     appVersion: 1.0.0
     created: "2024-02-12T19:59:08.064534453-03:00"
     description: Install lambdaping helm chart into kubernetes.
@@ -73,4 +85,4 @@ entries:
     urls:
     - https://udhos.github.io/lambdaping/lambdaping-0.1.0.tgz
     version: 0.1.0
-generated: "2024-02-12T19:59:08.064010807-03:00"
+generated: "2024-05-29T00:33:29.049486537-03:00"
